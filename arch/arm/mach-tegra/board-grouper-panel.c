@@ -389,7 +389,7 @@ static struct tegra_dc_mode grouper_panel_modes[] = {
 		.pclk = 85000000,
 #endif
 #ifdef CONFIG_GPU_OC_600
-		.pclk = 118965000, /* 118965000 */
+		.pclk = 101376000, /* 118965000 */
 #endif
 #else
 	/* 1280x800@60Hz */
@@ -782,3 +782,4 @@ int __init grouper_panel_init(void)
 #endif
 	return err;
 }
+
