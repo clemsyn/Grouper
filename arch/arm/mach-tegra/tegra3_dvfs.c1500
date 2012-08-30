@@ -30,7 +30,7 @@
 
 #ifdef CONFIG_VOLTAGE_CONTROL
 int user_mv_table[MAX_DVFS_FREQS] = {
-	800, 825, 850, 875, 900, 925, 950, 975, 1000, 1025, 1050, 1075, 1100, 1125, 1150, 1175, 1250, 1350};
+	800, 825, 850, 875, 900, 925, 950, 975, 1000, 1025, 1050, 1075, 1100, 1125, 1150, 1175, 1200, 1240};
 #endif
 
 static bool tegra_dvfs_cpu_disabled;
@@ -38,13 +38,13 @@ static bool tegra_dvfs_core_disabled;
 static struct dvfs *cpu_dvfs;
 
 static const int cpu_millivolts[MAX_DVFS_FREQS] = {
-	800, 825, 850, 875, 900, 925, 950, 975, 1000, 1025, 1050, 1075, 1100, 1125, 1150, 1175, 1250, 1350};
+	800, 825, 850, 875, 900, 925, 950, 975, 1000, 1025, 1050, 1075, 1100, 1125, 1150, 1175, 1200, 1240};
 
 static const unsigned int cpu_cold_offs_mhz[MAX_DVFS_FREQS] = {
 	  50,  50,  50,  50,  50,  50,  50,  50,  50,   50,   50,   50,   50,   50,   50,   50,   50,   50};
 
 static const int core_millivolts[MAX_DVFS_FREQS] = {
-	900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300};
+	900, 950, 1000, 1050, 1075, 1100, 1125, 1150, 1175};
 
 #define KHZ 1000
 #define MHZ 1000000
@@ -54,19 +54,19 @@ static const int core_millivolts[MAX_DVFS_FREQS] = {
 #define VDD_CPU_BELOW_VDD_CORE		300
 static int cpu_below_core = VDD_CPU_BELOW_VDD_CORE;
 
-#define VDD_SAFE_STEP			50
+#define VDD_SAFE_STEP			25
 
 static struct dvfs_rail tegra3_dvfs_rail_vdd_cpu = {
 	.reg_id = "vdd_cpu",
-	.max_millivolts = 1350,
+	.max_millivolts = 1250,
 	.min_millivolts = 750,
-	.step = 25,
+	.step = VDD_SAFE_STEP,
 	.jmp_to_zero = true,
 };
 
 static struct dvfs_rail tegra3_dvfs_rail_vdd_core = {
 	.reg_id = "vdd_core",
-	.max_millivolts = 1300,
+	.max_millivolts = 1250,
 	.min_millivolts = 900,
 	.step = VDD_SAFE_STEP,
 };
@@ -81,15 +81,15 @@ static int tegra3_get_core_floor_mv(int cpu_mv)
 	if (cpu_mv < 800)
 		return  900;
 	if (cpu_mv < 900)
-		return 1000;
+		return 950;
 	if (cpu_mv < 1000)
-		return 1100;
+		return 1050;
 	if (cpu_mv < 1100)
-		return 1200;
-        if (cpu_mv < 1200)
-		return 1250;
-        if (cpu_mv <= 1350)
-                return 1300;
+		return 1150;
+        if (cpu_mv < 1175)
+		return 1175;
+        if (cpu_mv <= 1250)
+                return 1175;
 	BUG();
 }
 
@@ -194,8 +194,8 @@ static struct dvfs cpu_dvfs_table[] = {
 	CPU_DVFS("cpu_g", 12, 3, MHZ, 550, 550, 770, 770,  910,  910, 1150, 1230, 1280, 1330, 1370, 1400, 1470, 1500, 1500, 1540, 1540, 1700),
 	CPU_DVFS("cpu_g", 12, 4, MHZ, 550, 550, 770, 770,  940,  940, 1160, 1240, 1280, 1360, 1390, 1470, 1500, 1520, 1520, 1590, 1700),
 
-	CPU_DVFS("cpu_g", 13, 3, MHZ, 550, 550, 770, 770,  910,  910, 1150, 1230, 1280, 1330, 1370, 1400, 1470, 1500, 1500, 1540, 1700, 1800),
-	CPU_DVFS("cpu_g", 13, 4, MHZ, 550, 550, 770, 770,  940,  940, 1160, 1240, 1280, 1360, 1390, 1470, 1500, 1520, 1520, 1600, 1800),
+	CPU_DVFS("cpu_g", 13, 3, MHZ, 550, 550, 770, 770,  910,  910, 1150, 1230, 1280, 1330, 1370, 1400, 1470, 1500, 1500),
+	CPU_DVFS("cpu_g", 13, 4, MHZ, 550, 550, 770, 770,  940,  940, 1160, 1240, 1280, 1360, 1390, 1470, 1500, 1500),
 
 	/*
 	 * "Safe entry" to be used when no match for chip speedo, process

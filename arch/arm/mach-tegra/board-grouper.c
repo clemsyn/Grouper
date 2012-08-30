@@ -69,7 +69,7 @@
 
 /* All units are in millicelsius */
 static struct tegra_thermal_data thermal_data = {
-	.temp_throttle = 68000,
+	.temp_throttle = 70000,
 	.temp_shutdown = 90000,
 	.temp_offset = TDIODE_OFFSET, /* temps based on tdiode */
 #ifdef CONFIG_TEGRA_EDP_LIMITS
@@ -79,7 +79,7 @@ static struct tegra_thermal_data thermal_data = {
 #ifdef CONFIG_TEGRA_THERMAL_SYSFS
 	.tc1 = 0,
 	.tc2 = 1,
-	.passive_delay = 2000,
+	.passive_delay = 5000,
 #else
 	.hysteresis_throttle = 10000,
 #endif
